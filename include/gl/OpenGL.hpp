@@ -21,7 +21,11 @@
 	#include <OpenGL/gl.h>
 #else
 	#ifdef __MINGW32__
-		#include <GL/glew.h>
+        #ifdef NO_GLEW
+            #include <GLAD/glad.h>
+        #else
+            #include <GL/glew.h>
+        #endif // NO_GLEW
 	#else
 		#include <GL/gl.h>
 	#endif
