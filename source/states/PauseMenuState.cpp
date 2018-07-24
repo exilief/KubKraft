@@ -40,16 +40,10 @@ PauseMenuState::PauseMenuState(ApplicationState *parent) : ApplicationState(pare
 void PauseMenuState::onEvent(const S_Event &event) {
 	m_menuWidget.onEvent(event);
 
-#ifdef USE_SDL
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-#elif defined USE_SFML
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-#endif // USE_SDL, USE_SFML
+	if (event.type == S_EventType::KeyPressed && S_Event_getKeyCode(event) == Keyboard::getKey(Keyboard::Escape)) {
 		Mouse::setCursorGrabbed(true);
 		Mouse::setCursorVisible(false);
-#ifdef USE_SFML
 		Mouse::resetToWindowCenter();
-#endif // USE_SFML
 
 		m_stateStack->pop();
 	}

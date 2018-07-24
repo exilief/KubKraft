@@ -24,18 +24,10 @@ TextButton::TextButton(const Callback &callback, Widget *parent) : TextButton(pa
 }
 
 void TextButton::onEvent(const S_Event &event) {
-	if (event.type == S_EventType(S_EventTypeID::MouseMoved)) {
-#ifdef USE_SDL
-		m_isHovered = isPointInWidget(event.motion.x, event.motion.y);
-#elif defined USE_SFML
-		m_isHovered = isPointInWidget(event.mouseMove.x, event.mouseMove.y);
-#endif // USE_SDL, USE_SFML
+	if (event.type == S_EventType::MouseMoved) {
+		m_isHovered = isPointInWidget(S_Event_getMouseMove(event).x, S_Event_getMouseMove(event).y);
 	}
-#ifdef USE_SDL
-	else if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && m_isHovered && m_callback) {
-#elif defined USE_SFML
-	else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && m_isHovered && m_callback) {
-#endif // USE_SDL, USE_SFML
+	else if (event.type == S_EventType::MouseButtonPressed && S_Event_getMouseButton(event).button == S_MouseButton::Left && m_isHovered && m_callback) {
 		m_callback(*this);
 	}
 }

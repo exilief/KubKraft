@@ -54,15 +54,16 @@ GameState::GameState() {
 }
 
 void GameState::onEvent(const S_Event &event) {
+#ifdef USE_SFML
+	static sf::Vector2i lastPosition;
+#endif // USE_SFML
+
+	if (event.type == S_EventType::MouseMoved) {
+		if(SCREEN_WIDTH / 2 != S_Event_getMouseMove(event).x || SCREEN_HEIGHT / 2 != S_Event_getMouseMove(event).y) {
 #ifdef USE_SDL
-	if (event.type == SDL_MOUSEMOTION) {
-		if(SCREEN_WIDTH / 2 != event.motion.x || SCREEN_HEIGHT / 2 != event.motion.y) {
 			m_camera.turnH(event.motion.xrel * 0.06);
 			m_camera.turnV(-event.motion.yrel * 0.06);
 #elif defined USE_SFML
-	static sf::Vector2i lastPosition;
-	if (event.type == sf::Event::MouseMoved) {
-		if(SCREEN_WIDTH / 2 != event.mouseMove.x || SCREEN_HEIGHT / 2 != event.mouseMove.y) {
 			m_camera.turnH((event.mouseMove.x-lastPosition.x) * 0.06);
 			m_camera.turnV(-(event.mouseMove.y-lastPosition.y) * 0.06);
 #endif // USE_SDL, USE_SFML
@@ -76,11 +77,7 @@ void GameState::onEvent(const S_Event &event) {
 			m_camera.updateViewMatrix();
 		}
 	}
-#ifdef USE_SDL
-	else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE && &m_stateStack->top() == this) {
-#elif defined USE_SFML
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape && &m_stateStack->top() == this) {
-#endif // USE_SDL, USE_SFML
+	else if (event.type == S_EventType::KeyPressed && S_Event_getKeyCode(event) == Keyboard::getKey(Keyboard::Escape) && &m_stateStack->top() == this) {
 		m_stateStack->push<PauseMenuState>(this);
 	}
 #ifdef USE_SDL

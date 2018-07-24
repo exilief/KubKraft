@@ -143,19 +143,11 @@ void BlockCursor::updateAnimationVertexBuffer(const Block &block, int animationP
 }
 
 void BlockCursor::onEvent(const S_Event &event, const Hotbar &hotbar) {
-	if (event.type == S_EventType(S_EventTypeID::MouseButtonPressed) && m_selectedBlock.w != -1) {
-#ifdef USE_SDL
-		if (event.button.button == SDL_BUTTON_LEFT) {
-#elif defined USE_SFML
-		if (event.mouseButton.button == sf::Mouse::Left) {
-#endif // USE_SDL, USE_SFML
+	if (event.type == S_EventType::MouseButtonPressed && m_selectedBlock.w != -1) {
+		if (S_Event_getMouseButton(event).button == S_MouseButton::Left) {
 			m_animationStart = GameClock::getTicks();
 		}
-#ifdef USE_SDL
-		else if (event.button.button == SDL_BUTTON_RIGHT) {
-#elif defined USE_SFML
-		else if (event.mouseButton.button == sf::Mouse::Right) {
-#endif // USE_SDL, USE_SFML
+		else if (S_Event_getMouseButton(event).button == S_MouseButton::Right) {
 			u32 blockId = m_world.getBlock(m_selectedBlock.x, m_selectedBlock.y, m_selectedBlock.z);
 			const Block &block = Registry::getInstance().getBlock(blockId);
 			const Item &item = Registry::getInstance().getItem(hotbar.currentItem());
@@ -182,12 +174,8 @@ void BlockCursor::onEvent(const S_Event &event, const Hotbar &hotbar) {
 			}
 		}
 	}
-	else if (event.type == S_EventType(S_EventTypeID::MouseButtonReleased)) {
-#ifdef USE_SDL
-		if (event.button.button == SDL_BUTTON_LEFT) {
-#elif defined USE_SFML
-		if (event.mouseButton.button == sf::Mouse::Left) {
-#endif // USE_SDL, USE_SFML
+	else if (event.type == S_EventType::MouseButtonReleased) {
+		if (S_Event_getMouseButton(event).button == S_MouseButton::Left) {
 			m_animationStart = 0;
 		}
 	}

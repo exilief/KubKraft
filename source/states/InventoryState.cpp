@@ -14,6 +14,7 @@
 #include "ApplicationStateStack.hpp"
 #include "InventoryState.hpp"
 #include "Mouse.hpp"
+#include "Keyboard.hpp"
 
 InventoryState::InventoryState(ApplicationState *parent) : ApplicationState(parent) {
 	m_shader.createProgram();
@@ -33,16 +34,10 @@ void InventoryState::onEvent(const S_Event &event) {
 	// if (m_parent)
 	// 	m_parent->onEvent(event);
 
-#ifdef USE_SDL
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) {
-#elif defined USE_SFML
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-#endif // USE_SDL, USE_SFML
+	if (event.type == S_EventType::KeyPressed && S_Event_getKeyCode(event) == Keyboard::getKey(Keyboard::Escape)) {
 		Mouse::setCursorGrabbed(true);
 		Mouse::setCursorVisible(false);
-#ifdef USE_SFML
 		Mouse::resetToWindowCenter();
-#endif // USE_SFML
 
 		m_stateStack->pop();
 	}

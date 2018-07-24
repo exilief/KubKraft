@@ -12,6 +12,7 @@
  * =====================================================================================
  */
 #include "HUD.hpp"
+#include "Keyboard.hpp"
 
 HUD::HUD(Camera &camera, Player &player, World &world, glm::mat4 &viewMatrix, glm::mat4 &projectionMatrix)
  : m_hotbar{player.inventory()},
@@ -31,11 +32,7 @@ HUD::HUD(Camera &camera, Player &player, World &world, glm::mat4 &viewMatrix, gl
 }
 
 void HUD::onEvent(const S_Event &event) {
-#ifdef USE_SDL
-	if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F3)
-#elif defined USE_SFML
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::F3)
-#endif // USE_SDL, USE_SFML
+	if (event.type == S_EventType::KeyPressed && S_Event_getKeyCode(event) == Keyboard::getKey(Keyboard::F3))
 		m_isDebugOverlayVisible ^= 1;
 
 	m_hotbar.onEvent(event);

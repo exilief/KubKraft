@@ -17,6 +17,7 @@
 #include <map>
 
 #include "IntTypes.hpp"
+#include "SDLHeaders.hpp"
 
 class Keyboard {
 	public:
@@ -35,20 +36,25 @@ class Keyboard {
 			Down,
 
 			BackSpace,
+			Escape,
 			LeftShift,
 			Space,
 			Return,
-			RightShift
+			RightShift,
+
+			F3
 		};
 
 		static bool isKeyPressed(Key key);
 		static bool isKeyPressedOnce(Key key);
 		static bool isKeyPressedWithDelay(Key key, u16 delay);
 
+		static S_KeyCode getKey(Key key);
+
 	private:
 		static std::map<Key, bool> pressed;
 		static std::map<Key, u32> lastTimePressed;
-		static std::map<Key, u32> keysCode;
+		static std::map<Key, S_KeyCode> keysCode;
 };
 
 #endif // KEYBOARD_HPP_

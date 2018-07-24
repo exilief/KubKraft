@@ -57,7 +57,7 @@ std::map<Keyboard::Key, u32> Keyboard::lastTimePressed = {
 	{Key::RightShift, 0}
 };
 
-std::map<Keyboard::Key, u32> Keyboard::keysCode = {
+std::map<Keyboard::Key, S_KeyCode> Keyboard::keysCode = {
 #ifdef USE_SDL
 	{Key::D,		SDLK_d},
 	{Key::Q,		SDLK_q},
@@ -73,10 +73,13 @@ std::map<Keyboard::Key, u32> Keyboard::keysCode = {
 	{Key::Down,		SDLK_DOWN},
 
 	{Key::BackSpace,  SDLK_BACKSPACE},
+	{Key::Escape,	  SDLK_ESCAPE},
 	{Key::LeftShift,  SDLK_LSHIFT},
 	{Key::Space,	  SDLK_SPACE},
 	{Key::Return,	  SDLK_RETURN},
-	{Key::RightShift, SDLK_RSHIFT}
+	{Key::RightShift, SDLK_RSHIFT},
+
+	{Key::F3,		SDLK_F3}
 #elif defined USE_SFML
 	{Key::D,		sf::Keyboard::D},
 	{Key::Q,		sf::Keyboard::Q},
@@ -92,10 +95,13 @@ std::map<Keyboard::Key, u32> Keyboard::keysCode = {
 	{Key::Down,		sf::Keyboard::Down},
 
 	{Key::BackSpace,  sf::Keyboard::BackSpace},
+	{Key::Escape,	  sf::Keyboard::Escape},
 	{Key::LeftShift,  sf::Keyboard::LShift},
 	{Key::Space,	  sf::Keyboard::Space},
 	{Key::Return,	  sf::Keyboard::Return},
-	{Key::RightShift, sf::Keyboard::RShift}
+	{Key::RightShift, sf::Keyboard::RShift},
+
+	{Key::F3,		sf::Keyboard::F3}
 #endif // USE_SDL, USE_SFML
 };
 
@@ -144,5 +150,9 @@ bool Keyboard::isKeyPressedWithDelay(Key key, u16 delay) {
 
 		return false;
 	}
+}
+
+S_KeyCode Keyboard::getKey(Key key) {
+	return keysCode[key];
 }
 
